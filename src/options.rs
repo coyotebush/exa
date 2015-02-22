@@ -115,15 +115,15 @@ impl FileFilter {
         match self.sort_field {
             SortField::Unsorted => {},
             SortField::Name => files.sort_by(|a, b| natord::compare(&*a.name, &*b.name)),
-            SortField::Size => files.sort_by(|a, b| a.stat.size.cmp(&b.stat.size)),
+            SortField::Size => files.sort_by(|a, b| a.stat.size.cmp(&b.stat.size).reverse()),
             SortField::FileInode => files.sort_by(|a, b| a.stat.unstable.inode.cmp(&b.stat.unstable.inode)),
             SortField::Extension => files.sort_by(|a, b| match a.ext.cmp(&b.ext) {
                 Ordering::Equal => natord::compare(&*a.name, &*b.name),
                 order => order
             }),
-            SortField::ModifiedDate => files.sort_by(|a, b| a.stat.modified.cmp(&b.stat.modified)),
-            SortField::AccessedDate => files.sort_by(|a, b| a.stat.accessed.cmp(&b.stat.accessed)),
-            SortField::CreatedDate  => files.sort_by(|a, b| a.stat.created.cmp(&b.stat.created)),
+            SortField::ModifiedDate => files.sort_by(|a, b| a.stat.modified.cmp(&b.stat.modified).reverse()),
+            SortField::AccessedDate => files.sort_by(|a, b| a.stat.accessed.cmp(&b.stat.accessed).reverse()),
+            SortField::CreatedDate  => files.sort_by(|a, b| a.stat.created.cmp(&b.stat.created).reverse()),
         }
 
         if self.reverse {
